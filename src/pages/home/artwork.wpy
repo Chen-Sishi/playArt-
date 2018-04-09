@@ -1,0 +1,53 @@
+
+<template>
+  <view class="content">
+    <view class="title-bg ">
+      <view class="title-content">
+        <image src="/images/h_atw_icon_work.png" class="title-icon"></image>
+        <text class="title">作品·artwork</text>
+      </view>
+      <navigator url="product/list"><image src="/images/h_read_icon_more.png" class="title-menu-icon"></image></navigator>
+    </view>
+
+    <view class="artwork-list-bg">
+      <view class="list"  wx:for="{{artwork_list}}" wx:for-item="artwork" wx:key="goodsId">
+        <navigator url="product/details?id={{artwork.goodsId}}"><image lazy-load src="{{artwork.goodsPicUrl}}?imageView2/1/w/335" class="list-img"></image></navigator>
+        <view class="title">{{artwork.goodsName}}</view>
+        <view class="author"><image src="{{artwork.head_url}}" class="author-icon"></image>{{artwork.nick_name}}</view>
+      </view>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {API} from '../../common'
+  // import abc from 'abc'
+  export default class artwork extends wepy.component {
+    props = {}
+        data = {
+            artwork_list:[]
+    }
+    events = {}
+   /*   onLoad(){
+          this.init();
+      }*/
+
+    watch = {}
+
+    methods = {}
+      init(){
+          let that = this;
+          API.userZPlist().then((data)=> {
+              if(data.Result=='OK')
+              {
+                  //that.setData({read_list:data.Records});
+                  that.artwork_list=data.Records;
+                  //console.log(that.artwork_list);
+                  that.$apply();
+              }
+          })
+      }
+  }
+</script>

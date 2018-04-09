@@ -1,0 +1,27 @@
+
+<template>
+
+    <web-view src="{{url}}"></web-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Index extends wepy.page {
+config = {
+navigationBarTitleText: '',
+}
+data={
+    url:''
+}
+
+onLoad(option){
+    let webUrl=option.url
+    console.log(option)
+    if(webUrl !=''){
+        this.url=webUrl
+        this.$apply();
+    }
+}
+}
+
+</script>

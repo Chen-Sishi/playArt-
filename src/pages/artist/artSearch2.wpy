@@ -1,0 +1,363 @@
+<style lang="less">
+    page {
+        background: #fff;
+    }
+
+    /*头部搜索*/
+    .head-search-bg {
+        width:750rpx;
+        height:88rpx;
+        background:#f3f3f3;
+        position:fixed;
+        top:0;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    .head-search-box {
+        position: relative;
+        flex: 1;
+        height:60rpx;
+        background:#fff;
+        border-radius:10rpx;
+        margin:14rpx auto;
+        color:#fff;
+        margin-left:30rpx;
+        border-radius: 30rpx;
+    }
+    .head-search-icon{
+        width: 40rpx;
+        height: 40rpx;
+        position: absolute;
+        top:10rpx;
+        left:10rpx;
+    }
+    .head-search-input{
+        font-size: 26rpx;
+        color: #888;
+        margin-left: 70rpx;
+        padding-right: 10rpx;
+        height:60rpx;
+        line-height: 60rpx;
+    }
+    .cancel-btn {
+        width: 100rpx;
+        height:60rpx;
+        line-height: 60rpx;
+        margin-right: 20rpx;
+        background:transparent;
+        border:none;
+        color: #717171;
+        font-size: 28rpx;
+        text-align: center;
+    }
+    }
+
+    .pd-top { padding-top:88rpx;}
+
+    /*推荐*/
+    .search-recommend {
+    margin-top:88rpx;
+    .content {
+        background: #fff;
+        width: 690rpx;
+        margin: auto;
+        padding: 0 30rpx;
+}
+    .title {
+        /*display: flex;*/
+        /*justify-content: space-between;*/
+        /*align-items: center;*/
+        height: 99rpx;
+        line-height: 99rpx;
+        border-bottom:#e0dbdb 1rpx solid;
+        font-size: 32rpx;
+        color:#333;
+    }
+    .recommend-artist-bg {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:30rpx 0;
+        border-bottom:#e0e0e0 1rpx solid;
+    &:last-child {
+        border-bottom: none;
+     }
+        .recommend-artist-avatar {
+            width: 184rpx;
+            height: 184rpx;
+        }
+    .recommend-artist-info {
+        width:450rpx;
+    padding:0 20rpx;
+    .name {
+            color: #353535;
+            font-size: 30rpx;
+          margin-bottom: 30rpx;
+        }
+        .job {
+            font-size: 26rpx;
+            color: #353535;
+        }
+        }
+    .recommend-more-icon{
+        width: 17rpx;
+        height: 31rpx;
+
+    }
+    }
+    }
+.result-bg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin:200rpx auto;
+
+    .result-img {
+        width: 498rpx;
+        height: 498rpx;
+        display: block;
+        margin-bottom: 20rpx;
+    }
+    .result {
+        font-size: 30rpx;
+        color: #9b9b9b;
+        text-align: center;
+    }
+}
+
+</style>
+<template>
+    <view class="head-search-bg ">
+        <view class="head-search-box">
+            <image src="/images/h_icon_fdj.png" class="head-search-icon"></image>
+            <input placeholder="搜索你感兴趣的匠人" class="head-search-input" bindconfirm="bindKeyInput" />
+        </view>
+        <view class="cancel-btn" bindtap="goBack">取消</view>
+    </view>
+
+    <!--推荐-->
+    <view class="search-recommend">
+        <view class="content" >
+            <view  class="recommend-artist-bg" wx:for="{{recommend_list}}" wx:item="{{item}}">
+                <image src="{{item.head_url}}?imageView/2/w/184" class="recommend-artist-avatar"></image>
+                <view  bindtap="sendUrl(homepage/artHomepage?id={{item.user_id}})">
+                <view class="recommend-artist-info">
+                    <view class="name">{{item.nick_name}}</view>
+                    <view class="job">{{item.user_signature}}</view>
+                </view>
+                </view>
+                <image src="/images/artist/right-arrow.png" class="recommend-more-icon"></image>
+            </view>
+        </view>
+    </view>
+
+    <!--无搜索结果-->
+    <view class="result-bg"   hidden="{{historyHidden}}">
+        <image src="/images/artist/no_result.png" class="result-img"></image>
+        <view class="result">没有搜索到合适的匠人</view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import {API} from '../../common'
+    export default class artSearch extends wepy.page {
+        config = {
+            navigationBarTitleText: '搜索'
+        }
+        data = {
+            recommend_list:[],
+            historyHidden:true,
+            searchText:'' ///搜索框输入的值
+        }
+        components = {
+
+        }
+        computed = {
+
+        }
+
+        methods = {
+            sendUrl:function (e) {
+                let that = this;
+                let page= that.getCurrentPages();
+                if(page.length>=4) {
+                    wx.redirectTo({
+                        url: e
+                    })
+                }else{
+                    wx.navigateTo({
+                        url: e
+                    })
+                }
+            },
+
+            bindKeyInput (e) { //点击搜索键盘捕捉的事件
+                wx.showToast({
+                    title: '',
+                    icon: 'loading'
+                })
+
+                let that = this;
+                let searchText = e.detail.value;
+                if (searchText) {
+                    API.searchYsj({"nickName": searchText}).then((data) => {
+                        if (data.success) {
+                            that.recommend_list = data.result;
+                            that.historyHidden=true;
+                            wx.hideLoading()
+                            that.$apply();
+                        }
+                    })
+
+                    let searchData = [];
+                     let obj =  wx.getStorageSync('searchData');
+                    if(obj){
+                        searchData=obj;
+                    }
+                    searchData.unshift(searchText)
+
+                    function unique(arr){
+                        // 遍历arr，把元素分别放入searchData数组(不存在才放)
+                        var searchData = new Array();
+                        for(var i in arr){
+                            //该元素在searchData内部不存在才允许追加
+                            if(searchData.indexOf(arr[i])==-1){
+                                searchData.push(arr[i]);
+                            }
+                        }
+                        return searchData;
+                    }
+                    let arr = unique(searchData);
+                    wx.setStorageSync('searchData', arr);
+                    that.sercherStorage=arr
+                    wx.getStorage({
+                        key: 'searchData',
+                        success: function(res) {
+                            this.sercherStorage=res.data
+                            console.log(res.data)
+                        }
+                    })
+                }
+
+
+            },
+            searchString (text) { //点击搜索键盘捕捉的事件
+                let that = this;
+                let searchText = text;
+                if (searchText) {
+                    API.searchYsj({"nickName": searchText}).then((data) => {
+                        if (data.success) {
+                            that.recommend_list = data.result;
+                            that.historyHidden=true;
+                            that.$apply();
+                        }
+                    })
+
+
+                    let searchData = [];
+                    let obj =  wx.getStorageSync('searchData');
+                    if(obj){
+                        searchData=obj;
+                    }
+
+                    searchData.unshift(searchText)
+
+                    function unique(arr){
+                        // 遍历arr，把元素分别放入searchData数组(不存在才放)
+                        var searchData = new Array();
+                        for(var i in arr){
+                            //该元素在searchData内部不存在才允许追加
+                            if(searchData.indexOf(arr[i])==-1){
+                                searchData.push(arr[i]);
+                            }
+                        }
+                        return searchData;
+                    }
+                    let arr = unique(searchData);
+                    wx.setStorageSync('searchData', arr);
+                    that.sercherStorage=arr
+                    wx.getStorage({
+                        key: 'searchData',
+                        success: function(res) {
+                            this.sercherStorage=res.data
+                            console.log(res.data)
+                        }
+                    })
+                }
+
+            },
+
+
+
+            //清楚缓存历史并关闭历史搜索框
+            clearSearchStorage () {
+                wx.removeStorageSync('searchData')
+                this.sercherStorage=[]
+
+            },
+
+            goBack(){
+                wx.navigateBack({
+                    delta: 1
+                })
+            }
+
+        }
+
+        events = {
+
+        }
+
+        onLoad(params){
+            wx.showToast({
+                title: '',
+                icon: 'loading'
+            })
+            let that = this;
+            if(params){
+                if(params.searchIndex) {
+                if(params.searchText) {
+                        this.searchText = params.searchText;
+                        API.searchYsj({"nickName": this.searchText}).then((data) => {
+                            if (data.success) {
+                                that.recommend_list = data.result;
+                                if(data.result  && data.result.length>0){
+                                    that.historyHidden = true;
+                                }else{
+                                    that.historyHidden = false;
+                                }
+                                wx.hideLoading()
+                                that.$apply();
+                            }
+                        })
+                    }
+                }else{
+                    wx.hideLoading()
+                    that.searchText=null;
+                    that.historyHidden = true;
+                    that.$apply();
+                }
+            }
+            this.init();
+
+        }
+
+        init(){
+            let that = this;
+            API.showSearchPage().then((data)=> {
+                if(data.Result=='OK')
+                {
+                    if(null==that.searchText || that.searchText=='') {
+                        that.recommend_list = data.Record.artistList;
+                    }
+                    that.hotSearch_tags=data.Record.hotSearch;
+                    that.$apply();
+                }
+            })
+        }
+
+
+
+
+    }
+</script>

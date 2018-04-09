@@ -1,0 +1,40 @@
+<style>
+    .content {
+        background: #fff;
+        width: 690rpx;
+        margin: auto;
+        padding: 0 30rpx;
+        overflow:hidden;
+        /*margin-bottom: 20rpx;*/
+    }
+    .adv-content {
+        margin:40rpx auto;
+    }
+    .pre-content{
+        margin:0rpx auto 40rpx auto;
+    }
+    .justify-text {
+        font-size: 26rpx;
+        line-height: 46rpx;
+        color: #565656;
+        text-align: justify;
+    }
+</style>
+<template>
+    <view class="content">
+        <view class="{{pre=='JustifyText' ? 'pre-content':'adv-content'}}">
+            <view class="justify-text">
+                {{pro.textContent}}
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class JustifyText extends wepy.component {
+        props = {
+            pro:Object,
+            pre:String
+        }
+    }
+</script>

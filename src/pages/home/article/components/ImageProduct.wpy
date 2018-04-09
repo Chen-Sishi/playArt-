@@ -1,0 +1,81 @@
+<style>
+    .content {
+        background: #fff;
+        width: 690rpx;
+        margin: auto;
+        padding: 0 30rpx;
+        overflow:hidden;
+        /*margin-bottom: 20rpx;*/
+    }
+    .artist-bg {
+        background: #f7f7f7;
+        width:750rpx;
+        display: flex;
+        align-items: center;
+        padding:20rpx 35rpx;
+
+    }
+    .product-bg {
+        height: 150rpx;
+    }
+    .product-img {
+        width: 150rpx;
+        height: 150rpx;
+        margin-right:25rpx;
+    }
+    .product-text {
+        font-size: 22rpx;
+        color: #212121;
+
+    }
+    .introduce {
+        width:505rpx;
+
+    }
+    .order-bg {
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        margin-top: 20rpx;
+    }
+    .work-author {
+        font-size: 25rpx;
+        color: #353535;
+        line-height: 40rpx;
+    }
+    .order-btn {
+        width: 120rpx;
+        height: 40rpx;
+        line-height: 40rpx;
+        font-size: 20rpx;
+        text-align: center;
+        color: #fff;
+        background-color: rgba(230, 67, 64, 1);
+        border-radius: 19rpx;
+    }
+</style>
+<template>
+    <repeat for="{{pro.prolist}}" key="index" index="index" item="po">
+    <view class="">
+        <view class="artist-bg product-bg">
+            <image src="{{po.productImage}}" class="product-img"></image>
+            <view class="introduce">
+                <view class="product-text">{{po.productText}}</view>
+                <view class="order-bg">
+                    <view class="work-author"><image src="/images/h_atw_icon_head_01.png" lazy-load></image>{{po.productAuthor}}
+                    </view>
+                    <view class="order-btn">立即预定</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    </repeat>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class BigImage extends wepy.component {
+        props = {
+            pro:Object
+        }
+    }
+</script>

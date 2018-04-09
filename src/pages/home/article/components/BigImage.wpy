@@ -1,0 +1,16 @@
+<style>
+    .bannerImg {
+        width: 750rpx;
+    }
+</style>
+<template>
+    <image src="{{pro.imgSrc}}?imageView/2/w/750" mode="widthFix" class="bannerImg" lazy-load></image>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class BigImage extends wepy.component {
+        props = {
+            pro:Object
+        }
+    }
+</script>

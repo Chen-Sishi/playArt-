@@ -1,0 +1,36 @@
+<style>
+    .artist-bg {
+        background: #f7f7f7;
+        width:750rpx;
+        display: flex;
+        align-items: center;
+        padding:20rpx 35rpx;
+
+    }
+    .avater {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 40rpx;
+        margin-right:25rpx;
+    }
+    .introduce {
+        width:505rpx;
+    }
+</style>
+<template>
+    <view class="artist-bg">
+        <image src="{{pro.productImage}}" class="avater"></image>
+        <view class="introduce">
+            <view class="work-name">{{pro.productText}}</view>
+            <view class="work-author">{{pro.productAuthor}}</view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class CImageText extends wepy.component {
+        props = {
+            pro:Object
+        }
+    }
+</script>

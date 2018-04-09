@@ -1,0 +1,635 @@
+<style lang="less">
+    @import "../../../wxParse/wxParse.wxss";
+  page {
+    height: 100%;
+  }
+    .article {
+        font-size: 28rpx;
+        padding: 20px 30rpx;
+    }
+  .pColor{
+      background: #f0f0f0;
+      margin-bottom: 20rpx;
+  }
+  .pColor1 {
+      background: #ffffff;
+      margin-bottom: 10rpx;
+  }
+
+  .content {
+    background: #fff;
+    width: 690rpx;
+    margin: auto;
+    padding: 0 30rpx;
+    overflow:hidden;
+    /*margin-bottom: 20rpx;*/
+  }
+
+  .content-bg {
+    height: 100%;
+  }
+  .banner {
+    width: 750rpx;
+    height: 500rpx;
+  }
+  .details-title {
+    font-size: 34rpx;
+    color: #212121;
+    line-height: 44rpx;
+    padding:20rpx 0 40rpx 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+  }
+  .bottom-btn-bg {
+    background:rgba(255,255,255,0.7);
+    border-top:#d2d2d2 1rpx solid;
+    height: 120rpx;
+    position: fixed;
+    bottom:0;
+    width: 100%;
+  }
+
+.btn-containe {
+  height: 120rpx;
+    display:flex;
+    justify-content:space-around;
+   align-items: center;
+    }
+  .bottom-btn {
+    width: 320rpx;
+    height: 84rpx;
+    line-height: 84rpx;
+    font-size: 30rpx;
+    color: #fff;
+    border-radius: 41rpx;
+    text-align: center;
+  }
+  .bg-846650 {
+    background: #846650;
+  }
+  .bg-353535 {
+    background: #353535;
+  }
+    /*弹出层*/
+    .model-bg {
+        background:rgba(0,0,0,0.4);
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index: 100;
+    }
+  .model-bg.show {
+      opacity: 1;
+  }
+  .model-content {
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    .model-contain {
+        height:860rpx;
+        border-radius:  10rpx;
+    }
+        .name {
+            font-size: 38rpx;
+            color: #000;
+            text-align: center;
+            font-weight: bold;
+            margin: 20rpx auto;
+        }
+        .job {
+            font-size: 30rpx;
+            color: #000;
+            text-align: center;
+        }
+  .model-img {
+      width: 650rpx;
+  }
+
+  .info {
+      display: flex;
+      justify-content: space-between;
+      border-top:#f1f1f1 1rpx solid;
+      margin-top:20rpx;
+      padding:20rpx 30rpx;
+  .title {
+      font-size: 30rpx;
+      font-weight: bold;
+      color: #000;
+  }
+    .text {
+          color: #6b6b6b;
+          font-size: 28rpx;
+        flex: 1;
+        margin-left: 20rpx;
+      }
+
+
+  }
+
+  .share-company {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding:20rpx 30rpx;
+  .share-logo {
+      width: 195rpx;
+      height: 195rpx;
+  }
+  .tips {
+      font-size: 32rpx;
+      color: #000;
+
+  }
+  .company {
+      font-size: 34rpx;
+      font-weight: bold;
+      color: #000;
+      margin-top: 20rpx;
+  }
+  }
+
+
+.share-btn {
+    background: #000;
+    width: 245rpx;
+    height: 84rpx;
+    border-radius: 42rpx;
+    margin: 30rpx auto;
+    font-size: 33rpx;
+    color: #fff;
+    text-align: center;
+    line-height: 84rpx;
+}
+  .share-icon {
+      width: 34rpx;
+      height: 36rpx;
+      vertical-align: middle;
+      margin-right: 20rpx;
+  }
+}
+  .artist-bg {
+      background: #f7f7f7;
+      width:100%;
+      height: 130rpx;
+      display: flex;
+      align-items: center;
+      padding: 0 35rpx;
+  }
+  .avater {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 40rpx;
+      margin-right:25rpx;
+  }
+  .introduce {
+      flex: 1;
+  }
+    .wxParse-p {
+        margin-bottom: 20rpx;
+    }
+    .wxParse-img {
+        display: block;
+    }
+
+    .pd-0 {
+      padding-bottom: 0!important;
+  }
+    .buy-btn .wxParse-inline {
+        color: #fff;
+    }
+    .price-red .wxParse-inline {
+        color: #c2231c;
+    }
+</style>
+<template>
+    <import src="../../../wxParse/wxParse.wxml"/>
+    <scroll-view class="content-bg {{padding ? 'pd-0':''}}" scroll-y="{{scrolly}}" >
+    <view class="{{pClass}}">
+      <image src="{{pro.coverImg}}" class="banner"></image>
+    </view>
+      <view class="content">
+        <view class="details-title {{pClass}}">
+          {{pro.title}}
+        </view>
+      </view>
+        <view bindtap="sendUrl(../../artist/homepage/artHomepage?id={{pro.userId}})">
+      <view class="artist-bg">
+            <image src="{{pro.headUrl}}" class="avater {{pClass1}}"></image>
+            <view class="introduce">
+                <view class="work-name {{pClass1}}">{{pro.nickName}}</view>
+                <view class="work-author {{pClass1}}">{{pro.userSignature}}</view>
+            </view>
+
+      </view>
+        </view>
+        <view class="article">
+        <template is="wxParse" data="{{wxParseData: pcontent.article.nodes}}"/>
+        </view>
+      <!--<repeat for="{{pro.content_list}}" key="index" index="index" item="content">-->
+          <!--<view wx:if="{{content.type=='BigImage'}}" class="{{pClass}}">-->
+              <!--<BigImage :pro="content.json"/>-->
+          <!--</view>-->
+          <!--<view wx:if="{{content.type=='JustifyText'}}" class="{{pClass}}">-->
+              <!--<JustifyText :pro="content.json" :pre="content.preType"/>-->
+          <!--</view>-->
+          <!--<view wx:if="{{content.type=='CImageText'}}">-->
+              <!--<CImageText :pro="content.json"/>-->
+          <!--</view>-->
+          <!--<view wx:if="{{content.type=='CenterText'}}" class="{{pClass}}">-->
+              <!--<CenterText :pro="content.json"/>-->
+          <!--</view>-->
+            <!--<view wx:if="{{content.type=='ImageProduct'}}" class="{{pClass}}">-->
+              <!--<ImageProduct :pro="content.json"/>-->
+            <!--</view>-->
+            <!--<view wx:if="{{content.type=='DoubleImage'}}" class="{{pClass}}">-->
+              <!--<DoubleImage :pro="content.json"/>-->
+            <!--</view>-->
+      <!--</repeat>-->
+        <view style="height:120rpx;"></view>
+    </scroll-view>
+    <block wx:if="{{pro.upCodeOne!='0'}}">
+    <view class="bottom-btn-bg" >
+      <view class="btn-containe">
+        <button class="bottom-btn bg-846650" open-type="share">{{pro.upCodeOne}}</button>
+        <button class="bottom-btn bg-353535" bindtap="shareFriends">{{pro.upCodeTwo}}</button>
+      </view>
+    </view>
+    </block>
+
+    <!--分享弹出-->
+    <view hidden="{{modelHidden}}" class="model-bg" bindtap="hideModel">
+        <view class="model-content">
+            <canvas class="model-contain" canvas-id="myCanvas" disable-scroll="true">
+            </canvas>
+            <view class="share-btn"  bindtap="save"><image src="/images/icon-fx.png" class="share-icon"></image>保存图片</view>
+
+        </view>
+
+    </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {API} from 'common'
+  import config from '../../../config';
+
+  import CImageText from './components/CImageText'
+  import SImageText from './components/SImageText'
+  import CenterText from './components/CenterText'
+  import BigImage from './components/BigImage'
+  import ImageProduct from './components/ImageProduct'
+  import JustifyText from './components/JustifyText'
+  import DoubleImage from './components/DoubleImage'
+  var WxParse = require('../../../wxParse/wxParse.js')
+
+  export default class details extends wepy.page {
+      config = {
+          navigationBarTitleText: '文章详情'
+      }
+      components = {
+          CImageText,
+          SImageText,
+          CenterText,
+          BigImage,
+          ImageProduct,
+          JustifyText,
+          DoubleImage
+      }
+      data = {
+          pClass: 'pColor',
+          pClass1: 'pColor1',
+          padding:false,
+          modelHidden: true,
+          scrolly: true,
+          shareurl:'',
+          codeUrl:'',
+          cover_img: '',
+          pcontent: '',
+          article: "",
+          pro:{
+              content_list:[],
+              upCodeOne:'0',
+              title: "　　　　　　　",
+              nickname: "　",
+              signature: "　",
+              headUrl: '1',
+              content_list:[
+                  {"type" : "BigImage"}
+              ]
+          },
+           qrCodeImg: config.host+'wx/main/getQrCode?path='
+      }
+      events = {}
+      onLoad(options){
+          this.modelHidden=true;
+
+          this.$apply();
+
+          var scene = decodeURIComponent(options.scene);
+          if(options.scene && scene){
+              let parpms = scene.split("_");
+                  options.id=parpms[0];
+                  if(parpms.length>1){
+                      options.type="gsh";
+                  }
+          }
+          this.init(options);
+        //  var scene = decodeURIComponent(options.scene);
+      }
+      watch = {}
+    saveToAlbum(file) {
+      let filePath=null;
+        wx.downloadFile({
+            url: file,
+            success(res) {
+                filePath = res.tempFilePath;
+                wx.saveImageToPhotosAlbum({
+                    filePath: filePath,
+                    success() {
+                        wx.hideLoading();
+                        wx.showModal({
+                            title: '成功保存图片',
+                            content: '已成功为您保存图片到手机相册，请自行前往朋友圈分享',
+                            showCancel: false,
+                            confirmText: "我知道了",
+                            success: function(res) {
+                                if (res.confirm) {
+                                    console.log('用户点击确定')
+                                } else if (res.cancel) {
+                                    console.log('用户点击取消')
+                                }
+                            }
+                        })
+                    },
+                    fail() {
+                        console.log("fail");
+                    }
+                })
+
+            }
+        })
+
+
+
+
+
+
+    }
+
+      saveToAlbumS(file) {
+          wx.saveImageToPhotosAlbum({
+              filePath: file,
+              success() {
+                  wx.hideLoading();
+                  wx.showModal({
+                      title: '成功保存图片',
+                      content: '已成功为您保存图片到手机相册，请自行前往朋友圈分享',
+                      showCancel: false,
+                      confirmText: "我知道了",
+                      success: function(res) {
+                          if (res.confirm) {
+                              console.log('用户点击确定')
+                          } else if (res.cancel) {
+                              console.log('用户点击取消')
+                          }
+                      }
+                  })
+              },
+              fail() {
+                  console.log("fail");
+              }
+          })
+
+
+
+
+
+
+      }
+    methods = {
+        sendUrl:function (e) {
+            let that = this;
+            let page= that.getCurrentPages();
+            if(page.length>=4) {
+                wx.redirectTo({
+                    url: e
+                })
+            }else{
+                wx.navigateTo({
+                    url: e
+                })
+            }
+        },
+        hideModel(e) {
+            this.modelHidden= true;
+            this.scrolly = true;
+        },
+        shareFriends:function () {
+            console.log("点击分享");
+            let that = this;
+            that.modelHidden= false;
+            that.scrolly = false;
+            const ctx = wx.createCanvasContext('myCanvas');
+            wx.showToast({
+                title: '加载中',
+                icon: 'loading'
+            })
+            console.log("开始下载");
+            wx.downloadFile({
+                url: that.pro.coverImg,
+                success: function(res) {
+                    let bannerImg = res.tempFilePath;
+                    // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
+                    if (res.statusCode === 200) {
+
+                        wx.downloadFile({
+                            url: that.qrCodeImg+that.codeUrl,
+                            success(res) {
+                                console.log("code", that.qrCodeImg+that.codeUrl);
+                                let codeImg = res.tempFilePath;
+                                if(res.statusCode === 200) {
+                                    console.log("开始画");
+                                    ctx.setFillStyle('#ffffff')
+                                    ctx.fillRect(0, 0, 300, 430)
+                                    ctx.drawImage(bannerImg, 0, 0, 300, 200);
+                                    ctx.drawImage(codeImg, 10, 345, 70, 70);
+                                    ctx.setFillStyle("#000000");
+                                    ctx.setFontSize(18)
+                                    ctx.setTextAlign('center')
+                                    ctx.fillText(that.pro.nickName, 140, 230);
+                                    //ctx.stroke();
+                                    ctx.setFontSize(10, 320);
+                                    ctx.setFontSize(15);
+                                    ctx.fillText(that.pro.userSignature, 140, 255);
+                                    ctx.beginPath()
+                                    ctx.setStrokeStyle("#f1f1f1");
+                                    ctx.setLineWidth(1)
+                                    ctx.moveTo(0, 270)
+                                    ctx.lineTo(300, 270);
+                                    ctx.stroke()
+                                    ctx.setTextAlign('left');
+                                    ctx.setFontSize(13);
+                                    ctx.setFillStyle("#6b6b6b");
+                                    //ctx.fillText(that.pro.content_desc, 19, 300);
+                                    let str = that.pro.contentDesc;
+                                    let strsub, strheight = 20;
+                                    for(let i=0; i<3; i++) {
+                                        strsub = str.substring(i*20, i*20 + 20);
+                                        ctx.fillText(strsub, 19, 295+ i* strheight);
+                                    }
+                                    ctx.setFontSize(15);
+                                    ctx.setFillStyle("#000000");
+                                    ctx.fillText('微信扫码或长按识别小程序', 90, 370);
+                                    ctx.setFontSize(17);
+                                    ctx.fillText('聚匠村',90, 400);
+                                    ctx.draw();
+                                    wx.hideToast();
+                                }
+                            },
+                            fail(e) {//如果保存出错
+                                console.log("error", e);
+                            }
+                        });
+
+
+                        //console.log(that.qrCodeImg);
+//                        wx.downloadFile({
+//                            url: 'https://gam.zallhy.com/860306551761903616',
+//                        });
+                    }
+                }
+            })
+
+        },
+        save:function () {
+            let that = this;
+            wx.showToast({
+                title: '正在保存图片',
+                icon: 'loading'
+            })
+
+           /* wx.getSetting({
+                success(res) {
+                    if (!res.authSetting['scope.writePhotosAlbum']) {
+                        wx.authorize({
+                            scope: 'scope.writePhotosAlbum',
+                            success() {
+                                // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+                                wx.startRecord()
+                            }
+                        })
+                    }
+                }
+            })*/
+
+
+            wx.canvasToTempFilePath({
+
+                destWidth: 600,
+                destHeight: 860,
+                canvasId: 'myCanvas',
+                success: function (res) {
+
+                    console.log(res);
+                    let imageFile = res.tempFilePath;
+                    wx.getSetting({
+
+                        success(res) {
+                            if (!res.authSetting['scope.writePhotosAlbum']) {
+                                wx.authorize({
+                                    scope: 'scope.writePhotosAlbum',
+                                    success() {
+                                        that.saveToAlbumS(imageFile);
+                                    },
+                                    fail() {
+                                        console.log("fail");
+                                    }
+                                })
+                            } else {
+                                that.saveToAlbumS(imageFile);
+                            }
+                        }
+                    })
+                },
+                fail() {//如果保存出错
+
+                    let imageFile = that.pro.shareImage;
+                    that.saveToAlbum(imageFile);
+                    //let that = this;
+                    /*let temp=[that.pro.shareImage];
+
+                    wx.previewImage({
+                        current:that.pro.shareImage, // 当前显示图片的http链接
+                        urls: temp
+                    })*/
+
+
+
+                }
+            });
+        },
+        onShareAppMessage: function () {
+            return {
+                title: this.pro.title,
+                desc: '聚匠村',
+                path: this.shareurl
+            }
+        }
+    }
+      init(options){
+
+          let that = this;
+          let article = '<div>我是HTML代码</div>';
+
+          API.findArticle(options).then((data)=> {
+              if(data.Result=='OK')
+              {
+                  that.pro=data.Record;
+                  that.pro.contentId=options.id;
+                  wx.setNavigationBarTitle({title:that.pro.contentType=='01'?that.pro.nickName:that.pro.title});//设置标题
+                 // let data = '<div>测试测试。。。。</div>';
+                  this.pcontent = WxParse.wxParse('article', 'html',  that.pro.contenText, that, 5);
+
+                  that.pClass = "";
+                  that.pClass1 = "";
+                  if(that.pro.upCodeOne=='0'){
+                      that.padding=true
+                  }
+                 // that.pro=data.Record;
+                  if(options.type) {
+                      that.shareurl = '/pages/home/article/details?type=gsh&id=' + that.pro.contentId
+                      that.codeUrl= 'pages/home/article/details&type=gsh&id=' + that.pro.contentId;
+                      //wx.setNavigationBarTitle()
+
+                      wx.setNavigationBarTitle({
+                          title: that.pro.nickname
+                      })
+
+                  }else{
+                      that.shareurl = '/pages/home/article/details?id=' + that.pro.contentId
+                      that.codeUrl= 'pages/home/article/details&id=' + that.pro.contentId;
+
+                  }
+                  that.$apply();
+              }
+          })
+      }
+
+
+      getQrcode(){
+          let that = this;
+         // API.getToken().then((data)=> {
+            //  if(data.Result=='OK')
+             // {
+
+
+                 // that.$apply();
+            //  }
+          //})
+      }
+  }
+</script>

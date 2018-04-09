@@ -1,0 +1,521 @@
+<style lang="less">
+  page {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .pColor{
+    background: #f0f0f0;
+    margin-bottom: 20rpx;
+  }
+  .list-bg {
+    /*overflow-y: scroll;*/
+    display: flex;
+    flex-direction: column;
+    /*margin-top:188rpx;*/
+    /*padding-top: 188rpx;*/
+      height: 100%;
+  }
+  .content {
+    background: #fff;
+    width: 690rpx;
+    margin: auto;
+    padding: 0 30rpx;
+    /*overflow-y:scroll;*/
+    /*margin-bottom: 20rpx;*/
+  }
+  .content:last-child {
+    margin-bottom: 0;
+  }
+
+  .title-bg {
+    display:flex;
+    justify-content: space-between;
+    height:88rpx;
+    line-height:88rpx;
+    border-bottom:1rpx solid rgba(210, 210, 210, 1);}
+
+  .title {
+    font-size: 30rpx;
+    color: #212121;
+  }
+/*搜索*/
+  .head-search-bg {
+    background: #f3f3f3;
+    width: 750rpx;
+    height: 188rpx;
+    position:fixed;
+    top: 0;
+      z-index: 2;
+  }
+  .head-search-input {
+    width: 560rpx;
+    height: 60rpx;
+    background:#fff;
+    border-radius: 29rpx 29rpx 29rpx 29rpx;
+    margin: 20rpx auto;
+    font-size: 26rpx;
+    color: #212121;
+    padding:0 25rpx 0 75rpx;
+  }
+  .search-icon {
+    width: 40rpx;
+    height: 40rpx;
+    position: absolute;
+    top: 30rpx;
+    left: 65rpx;
+    z-index: 2;
+  }
+
+
+  /*artwork*/
+  .artwork-list-bg {
+    display:inline-flex;
+    justify-content: space-between;
+    margin-top: 30rpx;
+    flex-wrap:wrap;
+      /*overflow-y: scroll;*/
+      height: auto;
+  }
+  .artwork-list-bg .list {
+    width: 335rpx;
+    margin-bottom: 30rpx;
+    border:#f0f0f0 1rpx solid;
+    padding-bottom:20rpx;
+
+  }
+  .artwork-list-bg .list-img {
+    width: 335rpx;
+    height: 335rpx;
+  }
+  .artwork-list-bg .title {
+    font-size: 30rpx;
+    color: #212121;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding:0 10rpx;
+
+  }
+  .artwork-list-bg .author-icon {
+    width: 24rpx;
+    height: 22rpx;
+    vertical-align: middle;
+    margin-right: 10rpx;
+  }
+  .artwork-list-bg .author {
+    font-size: 22rpx;
+    color: #888;
+    margin-top: 10rpx;
+    padding: 0 10rpx;
+  }
+  /*导航菜单*/
+  .nav-bg {
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    height: 88rpx;
+    line-height: 88rpx;
+    border-bottom:rgba(210, 210, 210, 1) 1rpx solid;
+  }
+  .nav-list {
+    font-size: 30rpx;
+    color: #212121;
+    display: flex;
+    align-items: center;
+  }
+  .arrow-icon {
+    width:16rpx;
+    height: 25rpx;
+    margin-left:10rpx;
+  }
+  /*无搜索结果*/
+  .result-bg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin:200rpx auto;
+
+  .result-img {
+    width: 498rpx;
+    height: 498rpx;
+    display: block;
+    margin-bottom: 20rpx;
+  }
+  .result {
+    font-size: 30rpx;
+    color: #9b9b9b;
+    text-align: center;
+  }
+  }
+
+</style>
+<template>
+  <!--搜索框-->
+
+  <view class="head-search-bg">
+    <image src="/images/h_icon_fdj.png" class="search-icon"></image>
+    <input placeholder="搜作品"  class="head-search-input" bindconfirm="bindKeyInput" />
+    <!--导航菜单-->
+    <view class="nav-bg">
+      <view class="nav-list" bindtap="sort">
+        <view style="color:{{sortColor ? '#e64340':'#212121'}}">综合</view>
+      </view>
+      <view class="nav-list" bindtap="hotSort">
+        <view style="color:{{hotDef ? '#e64340':'#212121'}}">热门</view>
+        <image src="/images/tab_down_def.png" class="arrow-icon" hidden="{{hotDef}}"></image>
+        <image src="{{hotArrow ? '/images/tab_down_pre.png':'/images/tab_up_pre.png'}}"  class="arrow-icon"  hidden="{{hotArrowShow}}"></image>
+      </view>
+      <view class="nav-list" bindtap="saleSort">
+        <view style="color:{{saleDef ? '#e64340':'#212121'}}">预定量</view>
+        <image src="/images/tab_down_def.png"  class="arrow-icon"  hidden="{{saleDef}}"></image>
+        <image src="{{saleArrow ? '/images/tab_down_pre.png':'/images/tab_up_pre.png'}}"   class="arrow-icon"  hidden="{{saleArrowShow}}"></image>
+      </view>
+    </view>
+  </view>
+
+
+  <scroll-view class="list-bg"  scroll-y bindscrolltolower="lower">
+      <view style="height:188rpx;"></view>
+    <!--无搜索结果-->
+    <view class="result-bg"  wx:if="{{artwork_list.length==0}}">
+      <image src="/images/artist/no_result.png" class="result-img"></image>
+      <view class="result">没有搜索到合适的作品</view>
+    </view>
+
+    <view class="content" >
+      <view class="artwork-list-bg" >
+        <view class="list"  wx:for="{{artwork_list}}" wx:for-item="artwork">
+          <navigator url="../product/details?id={{artwork.goodsId}}">
+            <view class="list-img {{pClass}}">
+              <image src="{{artwork.goodsPicUrl}}?imageView2/1/w/335" class="list-img"></image>
+            </view>
+          <view class="title">{{artwork.goodsName}}</view>
+          <view class="author"><image src="{{artwork.headUrl}}" class="author-icon"></image>{{artwork.nickName}}</view>
+          </navigator>
+        </view>
+      </view>
+
+    </view>
+
+      <view hidden="{{replyView}}" style="height:60rpx;background:#fff;display: flex; justify-content: center; align-items: center;"><text style="font-size: 26rpx;text-align: center">{{replyText}}</text></view>
+  </scroll-view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {API} from '../../../common'
+  // import abc from 'abc'
+  export default class product extends wepy.page {
+    config = {
+      navigationBarTitleText: '作品'
+    }
+
+    props = {
+
+    }
+
+    data = {
+        hotDef:false,
+        saleDef:false,
+        hotArrow:true,
+        saleArrow:true,
+        sortArrow:true,
+        nowPage:1,
+        textScroll:0,
+        pClass: 'pColor',
+        hotArrowShow:true,
+        saleArrowShow:true,
+        sortColor:true,
+        searchText:null,
+        replyText: '正在加载..',
+        replyView: true,
+        loadMore: false,
+      artwork_list:[
+        {
+          listimg:'/images/h_aty_img_01.png',
+          listtitle:"核桃手串 油脂丰富",
+          authoricon:'/images/h_atw_icon_head_01.png',
+          author:"晓月"
+        },
+        {
+          listimg:'/images/h_aty_img_01.png',
+          listtitle:"油脂丰富 沉香念珠 虎…",
+          authoricon:'/images/h_atw_icon_head_01.png',
+          author:"刘青峰"
+        },
+        {
+          listimg:'/images/h_aty_img_01.png',
+          listtitle:"名家古筝100年檀木精…",
+          authoricon:'/images/h_atw_icon_head_01.png',
+          author:"李潇云"
+        },
+          {
+              listimg:'/images/h_aty_img_01.png',
+              listtitle:"核桃手串 油脂丰富",
+              authoricon:'/images/h_atw_icon_head_01.png',
+              author:"晓月"
+          },
+          {
+              listimg:'/images/h_aty_img_01.png',
+              listtitle:"油脂丰富 沉香念珠 虎…",
+              authoricon:'/images/h_atw_icon_head_01.png',
+              author:"刘青峰"
+          },
+          {
+              listimg:'/images/h_aty_img_01.png',
+              listtitle:"名家古筝100年檀木精…",
+              authoricon:'/images/h_atw_icon_head_01.png',
+              author:"李潇云"
+          }
+
+      ]
+    }
+//      onReachBottom(e){
+//        let that = this;
+//
+//          let type='zh';
+//          if(that.hotDef){
+//              type='rm';
+//          }else if(that.sortColor){
+//              type='zh';
+//          }else if(that.saleDef){
+//              type='ydl';
+//          }
+//
+//          let page = that.nowPage;
+//          if(that.searchText){
+//              API.getZuoping({"type": type,"jtStartIndex":page,"jtPageSize": 6,"searchText":that.searchText}).then((data) => {
+//                  if (data.Result == 'OK') {
+//                      data.Records.forEach((item)=> {
+//                          that.artwork_list.push(item);
+//                          })
+//
+//
+//                      if(data.Records.length>0) {
+//                          that.nowPage = ++page;
+//                      }
+//                      that.$apply();
+//                  }
+//              })
+//
+//          }else{
+//              API.getZuoping({"type": type, "jtStartIndex":page,"jtPageSize": 6}).then((data) => {
+//                  if (data.Result == 'OK') {
+//                      data.Records.forEach((item)=> {
+//                          that.artwork_list.push(item);
+//                      })
+//                      if(data.Records.length>0) {
+//                          that.nowPage = ++page;
+//                      }
+//                      that.$apply();
+//                  }
+//              })
+//
+//          }
+//
+//
+//
+//
+//    }
+
+    events = {
+
+    }
+
+    watch = {}
+
+    methods = {
+        lower: function(e) {
+            let that = this;
+
+            let type='zh';
+            if(that.hotDef){
+                type='rm';
+            }else if(that.sortColor){
+                type='zh';
+            }else if(that.saleDef){
+                type='ydl';
+            }
+
+            let page = that.nowPage;
+            if(that.searchText){
+                API.getZuoping({"type": type,"jtStartIndex":page,"jtPageSize": 6,"searchText":that.searchText}).then((data) => {
+                    if (data.Result == 'OK') {
+                        data.Records.forEach((item)=> {
+                            that.artwork_list.push(item);
+                        })
+                        if(data.Records.length>0) {
+                            that.nowPage = ++page;
+                            that.replyText = "正在加载"
+                            console.log("testttt");
+                            that.replyText = "暂无更多"
+                        } else {
+                            that.replyText = "暂无更多"
+                        }
+
+                        that.$apply();
+                    }
+                })
+
+            }else{
+                if(!this.loadMore) {
+                    this.loadMore = true;
+                    this.replyView = false;
+                    this.replyView = false;
+                    that.$apply();
+                    API.getZuoping({"type": type, "jtStartIndex":page,"jtPageSize": 6}).then((data) => {
+                        if (data.Result == 'OK') {
+                            data.Records.forEach((item)=> {
+                                that.artwork_list.push(item);
+                            })
+                            if(data.Records.length>0) {
+                                that.nowPage = ++page;
+                                that.replyView = true;
+                                that.replyText = "正在加载..."
+                            } else {
+                                that.replyView = false;
+                                that.replyText = "暂无更多"
+                            }
+                            this.loadMore = false;
+                            that.$apply();
+                        }
+                    })
+                }
+
+
+            }
+
+        },
+        sort(e){
+            this.hotArrowShow=true
+            this.hotDef=false
+            this.saleArrowShow=true
+            this.saleDef=false
+            this.sortColor=true
+            this.nowPage = 1;
+            this.showdata('zh');
+
+        },
+        hotSort(e){
+            this.hotArrowShow=false
+            this.hotDef=true
+            this.saleArrowShow=true
+            this.saleDef=false
+            this.sortColor=false
+            if(this.hotArrow==true){
+                this.hotArrow=false
+            }else {
+                this.hotArrow=true
+            }
+            this.nowPage = 1;
+            this.showdata('rm');
+        },
+        saleSort(){
+            this.saleArrowShow=false
+            this.saleDef=true
+            this.hotArrowShow=true
+            this.hotDef=false
+            this.sortColor=false
+            if(this.saleArrow==true){
+                this.saleArrow=false
+            }else {
+                this.saleArrow=true
+            }
+            this.nowPage = 1;
+            this.showdata('ydl');
+
+        },
+        bindKeyInput (e) { //点击搜索键盘捕捉的事件
+
+            wx.showToast({
+                title: '',
+                icon: 'loading'
+            })
+            let that = this;
+            let searchText = e.detail.value;
+
+            if(searchText) {
+                API.getZuoping({"type": 'rm', "jtStartIndex":0,"jtPageSize": 6,"searchText":searchText}).then((data) => {
+                    if (data.Result == 'OK') {
+
+                        that.hotArrowShow=true
+                        that.hotDef=false
+                        that.saleArrowShow=true
+                        that.saleDef=false
+                        that.sortColor=true
+                        that.nowPage = 1;
+                        that.textScroll=-200;
+                       // that.focus=true;
+                        /*if(that.hotArrow==true){
+                            that.hotArrow=false
+                        }else {
+                            that.hotArrow=true
+                        }*/
+                        that.replyView = false;
+                        that.replyText = "暂无更多"
+
+                        that.searchText=searchText;
+                        that.artwork_list=data.Records;
+                        wx.hideLoading()
+                        that.$apply();
+                    }
+                })
+            }else{
+
+                that.searchText=null;
+                this.init();
+            }
+        }
+
+
+    }
+      onLoad(){
+          this.init();
+      }
+
+      init() {
+          let that = this;
+          let type='zh';
+          if(this.hotDef){
+              type='rm';
+          }else if(this.sortColor){
+              type='zh';
+          }else if(this.saleDef){
+              type='ydl';
+          }
+
+
+
+
+          API.getZuoping({"type": type, "jtStartIndex":0,"jtPageSize": 6,"searchText":''}).then((data) => {
+              if (data.Result == 'OK') {
+                  //that.setData({read_list:data.Records});
+                  that.artwork_list = data.Records;
+                  that.$apply();
+              }
+          })
+      }
+
+      showdata(type){
+          let that = this;
+          if(this.searchText){
+              API.getZuoping({"type": type, "jtStartIndex":0,"jtPageSize": 6,"searchText":this.searchText}).then((data) => {
+                  if (data.Result == 'OK') {
+                      that.artwork_list=data.Records;
+                      that.$apply();
+                  }
+              })
+
+          }else{
+              this.init();
+          }
+      }
+
+
+
+  }
+</script>

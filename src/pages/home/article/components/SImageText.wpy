@@ -1,0 +1,63 @@
+<style>
+    .content {
+        background: #fff;
+        width: 690rpx;
+        margin: auto;
+        padding: 0 30rpx;
+        overflow:hidden;
+        /*margin-bottom: 20rpx;*/
+    }
+    .artist-bg {
+        background: #f7f7f7;
+        width:750rpx;
+        display: flex;
+        align-items: center;
+        padding:20rpx 35rpx;
+
+    }
+    .product-bg {
+        height: 150rpx;
+    }
+    .introduce {
+        width:505rpx;
+    }
+    .product-img {
+        width: 150rpx;
+        height: 150rpx;
+        margin-right:25rpx;
+    }
+    .product-text {
+        font-size: 22rpx;
+        color: #212121;
+    }
+    .product-bg .work-author {
+        font-size: 22rpx;
+        color: #888;
+        line-height: 40rpx;
+    }
+    .product-bg .work-author image {
+        width: 24rpx;
+        height: 24rpx;
+        vertical-align: middle;
+        margin-right: 20rpx;
+    }
+</style>
+<template>
+    <view class="content">
+        <view class="artist-bg product-bg">
+            <image src="{{pro.productImage}}" class="product-img"></image>
+            <view class="introduce">
+                <view class="product-text">{{pro.productText}}</view>
+                <view class="work-author"><image src="/images/h_atw_icon_head_01.png" lazy-load></image>{{pro.productAuthor}}</view>
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class SImageText extends wepy.component {
+        props = {
+            pro:Object
+        }
+    }
+</script>

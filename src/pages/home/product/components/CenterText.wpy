@@ -1,0 +1,56 @@
+<style>
+    .content {
+        background: #fff;
+        width: 690rpx;
+        margin: auto;
+        padding: 0 30rpx;
+        overflow:hidden;
+        /*margin-bottom: 20rpx;*/
+    }
+    .adv-content {
+        margin:40rpx auto;
+    }
+    .title-num {
+        font-family:"Microsoft Himalaya";
+        color: #fff;
+        width: 32rpx;
+        height: 32rpx;
+        font-size: 32rpx;
+        line-height: 32rpx;
+        letter-spacing: 1rpx;
+        background: #846650;
+        text-align: center;
+        margin: auto auto;
+    }
+    .adv-title {
+        font-size: 34rpx;
+        line-height: 40rpx;
+        color: #846650;
+        text-align: center;
+        margin: 24rpx auto;
+    }
+    .adv-text {
+        font-size: 26rpx;
+        line-height: 54rpx;
+        color: #565656;
+        text-align: center;
+    }
+    .color-846650 {
+        color: #846650;
+    }
+</style>
+<template>
+    <view class="content">
+            <repeat for="{{pro.sectionContent}}" key="index" index="index" item="content">
+                <view class="{{content.bFont ? 'adv-text color-846650':'adv-text'}}">{{content.text}}</view>
+            </repeat>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class CenterText extends wepy.component {
+        props = {
+            pro:Object
+        }
+    }
+</script>

@@ -1,0 +1,320 @@
+<style lang="less">
+    page {
+        background: #fff;
+        display: flex;
+        display:-webkit-flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .pColor{
+        background: #f0f0f0;
+        margin-top: 15rpx;
+    }
+    view[hidden] {
+        display:none!important;
+
+    }
+
+    .head-search-bg {
+        width: 750rpx;
+        height: 88rpx;
+        background: #f3f3f3;
+        z-index: 2;
+        position: fixed;
+    }
+    .head-search-box {
+        width: 690rpx;
+        height: 60rpx;
+        background:#fff;
+        border-radius: 30rpx;
+        margin: 14rpx auto;
+        color: #fff;
+
+    }
+    .head-search-icon{
+        width: 40rpx;
+        height: 40rpx;
+        position: absolute;
+        top: 22rpx;
+        left:40rpx;
+    }
+    .head-search-input{
+        font-size: 26rpx;
+        color: #888;
+        margin-left: 70rpx;
+        height:60rpx;
+        line-height: 60rpx;
+        position: fixed;
+    }
+    .art-list-bg{
+       height: 100%;
+        /*padding-top: 80rpx;*/
+    }
+    .list-box{
+        background-color: #fff;
+    }
+    .list-item{
+        border-bottom: 2rpx solid #f0f0f0;
+        width: 690rpx;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        padding: 36rpx 0 40rpx 0;
+        image{
+            width: 85rpx;
+            height: 85rpx;
+        }
+        .container{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding-left:10rpx;
+            .author{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                 width:595rpx;
+                align-items: center;
+                height:85rpx;
+                font-size:30rpx;
+             margin-bottom:5rpx;
+                margin-top:4rpx;
+            .text{
+                    font-size: 30rpx;
+                    color:#353535;
+                    height: 50rpx;
+                    line-height:50rpx;
+                }
+                image{
+                    margin-top: 7rpx;
+                    width: 20rpx;
+                    height: 36rpx;
+                }
+            }
+            .title{
+                font-size:26rpx;
+                color: #846650;
+                height: 50rpx;
+                line-height:50rpx;
+
+            }
+            .content{
+                font-size: 26rpx;
+                color:#888;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                display:-webkit-box;
+                -webkit-box-orient:vertical;
+                -webkit-line-clamp:2;
+            }
+            .work-list{
+                margin-top: 20rpx;
+                display:inline-flex;
+             image{
+                    height: 140rpx;
+                    width: 140rpx;
+                }
+                image.space{
+                    margin-left: 10rpx;
+                }
+            }
+        }
+    }
+</style>
+<template>
+    <view class="head-search-bg">
+        <navigator url="artSearch" class="head-search-box">
+            <image src="/images/h_icon_fdj.png" class="head-search-icon"></image>
+            <input placeholder="搜索你感兴趣的匠人" class="head-search-input"/>
+        </navigator>
+    </view>
+    <!--<View class="art-list-bg">-->
+        <scroll-view scroll-y  class="art-list-bg" bindscrolltoupper="upper" bindscrolltolower="lower" scroll-top="{{scrollTop}}">
+           <view style="height:80rpx;"></view>
+            <view class="list-box">
+                <view class="list-item"  wx:for="{{art_list}}" wx:for-item="art" wx:key="user_id">
+                    <view style="height: 85rpx;" class="{{pClass}}">
+                        <image src="{{art.headUrl}}?imageView/2/w/84"></image>
+                    </view>
+                    <view class="container">
+                        <navigator url="homepage/artHomepage?id={{art.userId}}">
+                            <view class="author">
+                                <view>
+                                    <view class="author-info {{pClass}}">{{art.nickName}}</view>
+                                    <view class="title {{pClass}}">{{art.userSignature}}</view>
+                                </view>
+                                <image src="/images/artist/right-arrow.png"></image>
+
+                            </view>
+                            <text class="content {{pClass}}" >{{art.userDesc}}</text>
+                        </navigator>
+                        <scroll-view scroll-x style="width: 595rpx; height:150rpx;" wx:if="{{art.proList.length>0}}"  >
+                            <view class="work-list">
+                                <repeat for="{{art.proList}}" key="index" index="index" item="img">
+                                    <view class="{{pClass}}">
+                                    <image class="{{index%4==0 ? '':'space'}}" data-src="{{img}}?imageView/2/w/140" src="{{img}}?imageView/2/w/140" id="{{index+'_'+art.userId}}" bindtap="previewImage" lazy-load=true></image>
+                                    </view>
+                                </repeat>
+                            </view>
+                        </scroll-view>
+                    </view>
+
+                </view>
+
+            </view>
+            <view hidden="{{replyView}}" style="height:60rpx;background:#fff;display: flex; justify-content: center; align-items: center;"><text style="font-size: 26rpx;text-align: center">{{replyText}}</text></view>
+        </scroll-view>
+
+</template>
+<script>
+    import wepy from 'wepy'
+    import {API} from '../../common'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '匠人'
+        }
+        data = {
+            nowPage:2,
+            art_list:[
+                {
+                    user_signature: "　　　　",
+                    head_url: "",
+                    nick_name: "　　　　",
+                    pro_list: [1, 1, 1, 1],
+                    user_desc: "　　　　　　　　　　　　",
+                    user_id: "1",
+                    user_signature: "　　　　"
+                },
+                {
+                    user_signature: "　　　　",
+                    head_url: "",
+                    nick_name: "　　　　",
+                    pro_list: [1, 1, 1, 1],
+                    user_desc: "　　　　　　　　　    ",
+                    user_id: "1",
+                    user_signature: "　　　　"
+                },
+                {
+                    uuser_signature: "　　　　",
+                    head_url: "",
+                    nick_name: "　　　　",
+                    pro_list: [1, 1, 1, 1],
+                    user_desc: "　　　　　　　　　　　",
+                    user_id: "1",
+                    user_signature: "　　　　"
+                }
+            ],
+            replyText: '正在加载..',
+            replyView: true,
+            pClass: "pColor",
+            loadMore: false,
+
+        }
+        components = {
+
+        }
+        computed = {
+
+        }
+
+        methods = {
+            previewImage(e) {
+               let id= e.currentTarget.id;
+               let nowId = id.split("_")[1];
+
+                let imageUrl = [];
+
+                this.data.art_list.map((article)=> {
+                    if(article.userId==nowId) {
+                        article.proList.map((img) => {
+                            imageUrl.push(img);
+                        });
+                    }
+
+                });
+
+                let current = e.currentTarget.dataset.src;
+                current= current.substring(0,current.indexOf("?"));
+                wx.previewImage({
+                    current:current, // 当前显示图片的http链接
+                    urls:imageUrl
+                })
+                this.$apply();
+            },
+
+
+        }
+
+        events = {
+
+        }
+        lower(e) {
+            if(!this.loadMore) {
+                let that=this;
+                let page = that.nowPage;
+                this.loadMore = true;
+                console.log("scroll");
+                this.replyView = false;
+                that.$apply();
+                API.getYishujia({"jtStartIndex":page,"jtPageSize": 4}).then((data)=> {
+                    if(data.Result=='OK')
+                    {
+                        console.log("succeed");
+
+                        data.Records.forEach((item)=> {
+                            that.art_list.push(item);
+                        })
+
+                        if(data.Records.length>0) {
+                            that.nowPage = ++page;
+                            that.replyView = true;
+                            that.replyText = "正在加载..."
+                        } else {
+                            that.replyView = false;
+                            that.replyText = "暂无更多"
+                        }
+                        this.loadMore = false;
+                        that.$apply();
+
+                    }
+                })
+            }
+
+        }
+        scroll() {
+
+        }
+        upper() {
+
+        }
+
+        onLoad(res){
+            wx.showToast({
+                title: '页面加载中...',
+                icon: 'loading'
+            })
+
+            this.init();
+
+    }
+
+        init(){
+            let that = this;
+            API.getYishujia().then((data)=> {
+                if(data.Result=='OK')
+                {
+                    //that.setData({read_list:data.Records});
+                    that.art_list=data.Records;
+                    that.art_list.map((item, index)=> {
+
+                    });
+                    that.pClass = "";
+                    that.$apply();
+                    wx.hideLoading()
+                }
+            })
+        }
+    }
+</script>

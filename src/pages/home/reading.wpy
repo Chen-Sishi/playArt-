@@ -1,0 +1,65 @@
+
+<template>
+  <view class="content">
+    <view class="title-bg ">
+      <view class="title-content">
+        <image src="/images/h_read_icon_pd.png" class="title-icon"></image>
+        <text class="title">品读·Reading</text>
+      </view>
+      <navigator url="reading/hot"> <image src="/images/h_read_icon_more.png" class="title-menu-icon"></image> </navigator>
+    </view>
+    <repeat for="{{read_list}}" key="index" index="index" item="read">
+      <navigator url="article/details?id={{read.contentId}}" class="reading-list-bg">
+        <view class="list">
+          <view class="list-title">{{read.title}}</view>
+          <image src="{{read.headUrl}}" class="list-avatar"></image>
+          <text class="author">{{read.nickName}}</text>
+          <view class="list-text">{{read.contentDesc}}</view>
+        </view>
+        <image src="{{read.coverImg}}?imageView2/1/w/200" class="list-img"></image>
+      </navigator>
+    </repeat>
+
+  </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {API} from '../../common'
+    // import abc from 'abc'
+    export default class reading extends wepy.component {
+        props = {}
+
+        data = {
+            read_list:[
+                {
+                    title: "",
+                    headUrl: "",
+                    nickName: "",
+                    contentDesc: "",
+                }
+            ]
+        }
+        events = {}
+       /* onLoad(){
+            this.init();
+        }*/
+
+        watch = {}
+
+        methods = {
+
+        }
+        init(){
+            let that = this;
+            API.getinitPd().then((data)=> {
+                if(data.Result=='OK')
+                {
+                    //that.setData({read_list:data.Records});
+                    that.read_list=data.Records;
+                    that.$apply();
+                }
+            })
+        }
+    }
+</script>

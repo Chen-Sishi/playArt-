@@ -1,0 +1,113 @@
+<style lang='less'>
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+    .navigator-hover {
+        background: none;
+        opacity:1;
+    }
+
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+import {API} from 'common'
+export default class extends wepy.app {
+  config = {
+    pages: [
+        'pages/home/index',
+        'pages/home/product/details',
+        'pages/home/product/list',
+        'pages/home/story/new',
+        'pages/home/reading/hot',
+        'pages/home/article/details',
+        'pages/artist/index',
+        'pages/artist/homepage/artHomepage',
+        'pages/artist/artSearch',
+        'pages/artist/artSearch2',
+        'pages/home/webview'
+
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#000',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: '#fff'
+    },
+    tabBar: {
+      'back':'#fff',
+        color:'#888',
+        selectedColor:'#212121',
+      'list': [{
+              'pagePath': 'pages/home/index',
+              'text': '首页',
+              'iconPath':'/images/tab_home_def.png',
+              'selectedIconPath':'/images/tab_home_pre.png'
+       },
+          {
+              'pagePath': 'pages/artist/index',
+              'text': '匠人',
+              'iconPath':'/images/tab_artist_def.png',
+              'selectedIconPath':'/images/tab_artist_pre.png'
+          }]
+    },
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+//      API.otherContent(self.data.params).then((data)=> {
+//          self.content = data.data;
+//          for (var i=0;i<self.content.length;i++){
+//              var strs= new Array();
+//              if(self.content[i].imgurl!="" && self.content[i].imgurl!=null) {
+//                  strs = self.content[i].imgurl.split(",");
+//                  self.content[i].imgurl = strs;
+//              }
+//          }
+//          self.$apply();
+//      })
+    this.testAsync()
+  }
+
+  sleep (s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync () {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

@@ -1,0 +1,23 @@
+<style>
+    .double-img {
+        display: flex;
+    justify-content: space-between;
+    }
+    .mr-10 {
+        margin-right:20rpx;
+     }
+</style>
+<template>
+    <view class=" content double-img">
+        <image src="{{pro.doubleImage1}}?imageView/2/w/375" mode="widthFix" class="mr-10" lazy-load> </image>
+        <image src="{{pro.doubleImage2}}?imageView/2/w/375" mode="widthFix" lazy-load></image>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class DoubleImage extends wepy.component {
+        props = {
+            pro:Object
+        }
+    }
+</script>

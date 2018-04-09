@@ -1,0 +1,357 @@
+<style lang="less">
+  page {
+    background: #f3f3f3;
+    height: 100%;
+  }
+  .scroll {
+    height: 100%;
+  }
+  .slide-image-bg {
+    height: 500rpx;
+    position: relative;
+
+  }
+  .slide-image {
+    width: 750rpx;
+    height: 500rpx;
+  }
+  .head-search-bg {
+    width: 750rpx;
+    height: 80rpx;
+    background: rgba(255, 255, 255, 0.5);
+    position: fixed;
+    top: 0;
+  }
+  .head-search-input {
+    width: 560rpx;
+    height: 60rpx;
+    background:#fff;
+    border-radius: 29rpx 29rpx 29rpx 29rpx;
+    margin: 10rpx auto;
+    font-size: 26rpx;
+    color: #888;
+    padding:0 25rpx 0 75rpx;
+  }
+.search-icon {
+  width: 40rpx;
+  height: 40rpx;
+  position: absolute;
+  top: 20rpx;
+  left: 65rpx;
+  z-index: 2;
+}
+  .content {
+    background: #fff;
+    width: 690rpx;
+    margin: auto;
+    padding: 0 30rpx;
+    overflow:hidden;
+    margin-bottom: 20rpx;
+  }
+  .content:last-child {
+    margin-bottom: 0;
+  }
+/*reading*/
+
+  .title-bg {
+    display:flex;
+    justify-content: space-between;
+    height:88rpx;
+    line-height:88rpx;
+    border-bottom:1rpx solid rgba(210, 210, 210, 1);}
+  .title-content {
+
+ }
+  .title-icon {
+    vertical-align: middle;
+    width: 29rpx;
+    height: 30rpx;
+  margin-right: 10rpx;
+  }
+.title-menu-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-top:15px;
+
+}
+  .title {
+    font-size: 30rpx;
+    color: #212121;
+  }
+
+  .reading-list-bg {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
+  }
+  .reading-list-bg .reading-list-bg:last-child {
+    border: none;
+  }
+  .reading-list-bg .list {
+    width: 466rpx;
+    margin-right: 10rpx;
+  }
+  .reading-list-bg .list-title {
+    font-size: 34rpx;
+    color: #212121;
+  }
+  .reading-list-bg .list-avatar {
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 20rpx;
+    vertical-align: middle;
+  }
+  .reading-list-bg .author {
+    font-size: 22rpx;
+    color: #212121;
+    margin-left: 10rpx;
+  }
+  .reading-list-bg .list-text {
+    font-size: 26rpx;
+    color: #888;
+    margin-top: 10rpx;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+  }
+  .reading-list-bg .list-img {
+  width: 200rpx;
+  height: 200rpx;
+  flex: 1;
+display: block;
+}
+  /*story*/
+  .story-list-bg {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content:space-between;
+    margin-top: 30rpx;
+    flex-wrap:wrap;
+    -webkit-flex-wrap:wrap;
+  }
+  .story-list-bg .list {
+    width: 220rpx;
+    margin-bottom: 30rpx;
+    /*float: left;*/
+  }
+  .story-list-bg .list-img {
+    width: 220rpx;
+    height: 220rpx;
+    display: block;
+    margin-bottom: 30rpx;
+  }
+  .story-list-bg .title {
+    font-size: 26rpx;
+    color: #212121;
+    text-align: center;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    margin-bottom:5rpx;
+  }
+  .story-list-bg .describe {
+    font-size: 22rpx;
+    color: #888;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    line-height:36rpx;
+  }
+  /*artwork*/
+  .artwork-list-bg {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30rpx;
+    flex-wrap:wrap;
+  }
+  .artwork-list-bg .list {
+    width: 335rpx;
+    margin-bottom: 30rpx;
+  }
+  .artwork-list-bg .list-img {
+    width: 335rpx;
+    height: 335rpx;
+  }
+  .artwork-list-bg .title {
+    font-size: 30rpx;
+    color: #212121;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+  }
+  .artwork-list-bg .author-icon {
+    width: 24rpx;
+    height: 22rpx;
+    vertical-align: middle;
+    margin-right: 10rpx;}
+
+  .artwork-list-bg .author {
+    font-size: 22rpx;
+    color: #888;
+    margin-top: 10rpx;
+  }
+  .placeholder {
+      width:220rpx;
+      height:220rpx;
+    margin-bottom:30rpx;
+    background-color: #f0f0f0;
+
+  }
+
+</style>
+<template>
+  <scroll-view class="scroll" scroll-y style="height: 100%" bindscroll="scroll">
+  <view class="slide-image-bg">
+    <swiper indicator-dots="{{indicatorDots}}" indicator-active-color="#fff"  autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="{{circular}}" class="slide-image-bg">
+      <block wx:for="{{imgUrls}}" wx:item="{{item}}" wx:key="id">
+        <navigator url="webview?url={{item.pathurl}}">
+          <swiper-item>
+         <image src="{{item.coverimg}}?imageView2/1/w/750/h/500"  class="slide-image"></image>
+        </swiper-item>
+        </navigator>
+      </block>
+    </swiper>
+
+    <view class="head-search-bg">
+      <image src="/images/h_icon_fdj.png" class="search-icon"></image>
+      <input placeholder="搜索匠人"  class="head-search-input"  bindconfirm="bindKeyInput"/>
+    </view>
+  </view>
+  <arstory/>
+  <artwork/>
+  <reading/>
+  </scroll-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {API} from '../../common'
+  import arstory from './arstory'
+  import artwork from './artwork'
+  import reading from './reading'
+   export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '聚匠村',
+    }
+    components = {
+
+      arstory,
+      artwork,
+      reading
+    }
+
+    data = {
+      imgUrls: [],//轮播图对像
+      indicatorDots: true,
+      autoplay: true,
+      circular:true,
+      interval: 3000,
+      duration: 100
+    }
+       onShow(){
+           let that = this;
+           //console.log(arstory)
+           //debugger
+
+           this.$invoke('arstory','init');
+           this.$invoke('artwork','init');
+           this.$invoke('reading','init');
+           //arstory.methods.init();
+           //artwork.init();
+           //reading.init();
+           let obj =  wx.getStorageSync('LBData');
+           if(!obj || !obj.info) {
+               this.methods.init(that);
+           }else{
+               let objDate = that.formatDate(new Date());
+               let nowDate=obj.nowDate;
+
+               let day = that.getTime2Time(objDate,nowDate);//(nowDate - obj.nowDate) / (1000 * 60 * 60 * 24); //大于一天则重新拉一次数据
+               if(day>1){
+                   this.methods.init(that);
+               }else{
+                   //console.log(obj.info);
+                   that.imgUrls=obj.info;
+               }
+
+           }
+    }
+
+        formatDate(now) {
+           var year = now.getFullYear();
+           var month = now.getMonth() + 1;
+           var date = now.getDate();
+           var hour = now.getHours();
+           var minute = now.getMinutes();
+           var second = now.getSeconds();
+           if(date<10){
+               date="0"+date;
+           }
+           return year + "-" + month + "-" + date +" "+hour+":"+minute+":"+second;
+       }
+
+       getTime2Time($time1, $time2)
+       {
+           var time1 = arguments[0], time2 = arguments[1];
+           time1 = Date.parse(time1)/1000;
+           time2 = Date.parse(time2)/1000;
+           var time_ = time1 - time2;
+           return (time_/(3600*24));
+       }
+
+       onReachBottom(){
+           let that = this;
+           this.methods.init(that);
+       }
+
+    computed = {
+
+    }
+
+    methods = {
+        init(that){
+            API.getinitLb().then((data)=> {
+                if(data.Result=='OK')
+                {
+                    let nowdate = that.formatDate(new Date());
+                    let obj={}
+                    obj.info=data.Records;
+                    obj.nowDate=nowdate;
+                    wx.setStorageSync('LBData', obj);
+
+                    that.setData({imgUrls:data.Records});
+                }
+            })
+         },
+        bindKeyInput (e) { //点击搜索键盘捕捉的事件
+            let that = this;
+            this.methods.init(that);
+            console.log(e.detail.value);
+            let searchText = e.detail.value;
+            if(searchText) {
+                //this.$navigate(url:String|Object, [params:Object])
+                this.$navigate('../artist/artSearch2', {"searchText": searchText,"type":'to',"searchIndex":true});
+
+            }
+        }
+    }
+   scroll(e) {
+       var seeHeight = this.data.clientHeight; //可见区域高度
+       var arrHight = this.data.arrHight;
+       var event = e;
+       var scrollTop = event.detail.scrollTop;
+       //console.log(scrollTop)
+   }
+           events = {
+    }
+
+  }
+</script>
